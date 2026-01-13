@@ -1,0 +1,25 @@
+defaults:
+  - _aucurriculum_train_
+  - _self_
+
+results_dir:  /data/chi-gpu1/go35mig/results_cur
+experiment_id: default
+iterations: 5
+
+hydra:
+  sweeper:
+    params:
+      +seed: 1
+      +batch_size: 32
+      +learning_rate: 0.001
+      #dataset: ToyTabular-C
+      dataset: SpeechCommands-16k
+      #model: ToyFFNN
+      model:  Cnn10
+      optimizer: Adam
+      curriculum: None
+      curriculum/sampling: None
+      curriculum/scoring: None
+      curriculum/pacing: None
+      curriculum.pacing.initial_size: 1
+      curriculum.pacing.final_iteration: 0
