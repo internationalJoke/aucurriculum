@@ -29,7 +29,10 @@ which aucurriculum
 # Run your training command
 #autrainer train -cn  AA_train0dB_test0dB.yaml device=cuda
 
-aucurriculum train
+#aucurriculum train
+
+aucurriculum curriculum
+
 
 #autrainer train -cn   GG_train0dB_test-5dB.yaml device=cuda
 #
