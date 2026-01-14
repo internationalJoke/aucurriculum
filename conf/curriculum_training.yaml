@@ -4,13 +4,13 @@ defaults:
 
 results_dir: /data/chi-gpu1/go35mig/results_cur
 experiment_id: default
-iterations: 50
+iterations: 15
 
 hydra:
   sweeper:
     params:
       +seed: 1
-      +batch_size: 32
+      +batch_size: 64
       +learning_rate: 0.001
       dataset: SpeechCommands-16k
       model: Cnn10
