@@ -33,7 +33,9 @@ which aucurriculum
 
 #aucurriculum curriculum
 
-aucurriculum train -cn curriculum_training
+#aucurriculum train -cn curriculum_training
+
+aucurriculum train -cn anticurriculum_training
 
 #autrainer train -cn   GG_train0dB_test-5dB.yaml device=cuda
 #
