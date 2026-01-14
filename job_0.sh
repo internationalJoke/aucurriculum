@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#SBATCH --time=10:00:00
+#SBATCH --time=48:00:00
 #SBATCH --partition=students
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
@@ -8,45 +8,35 @@
 #SBATCH --output=./autrain_job_0.out
 
 # Change to your working directory
-#cd /home/go35mig/zhiping/autrainer_example
 cd /home/go35mig/aucurriculum
 
-# Activate your virtual environment (NOT direnv in your case)
-#source /home/go35mig/autrainenv/bin/activate
+# Activate your virtual environment
 micromamba activate myenv
-
-# Export your library path
-#export LD_LIBRARY_PATH=/nix/store/7n3q3rgy5382di7ccrh3r6gk2xp51dh7-gcc-14.2.1.20250322-lib/lib:$LD_LIBRARY_PATH
-
 
 echo "Job started on $(hostname)"
 echo "Environment activated"
-echo "which autrainer: $(which autrainer)"
-
-
 which python
 which aucurriculum
-# Run your training command
-#autrainer train -cn  AA_train0dB_test0dB.yaml device=cuda
 
-#aucurriculum train
+# ===========================================
+# Curriculum Learning Experiment (50 epochs)
+# ===========================================
 
-#aucurriculum curriculum
+# Step 1: Baseline training (generates checkpoints for scoring)
+echo "=== Step 1: Baseline Training ==="
+aucurriculum train
 
-#aucurriculum train -cn curriculum_training
+# Step 2: Compute CumAcc difficulty scores
+echo "=== Step 2: CumAcc Scoring ==="
+aucurriculum curriculum
 
+# Step 3: Curriculum training (easy → hard)
+echo "=== Step 3: Curriculum Training ==="
+aucurriculum train -cn curriculum_training
+
+# Step 4: AntiCurriculum training (hard → easy)
+echo "=== Step 4: AntiCurriculum Training ==="
 aucurriculum train -cn anticurriculum_training
 
-#autrainer train -cn   GG_train0dB_test-5dB.yaml device=cuda
-#
-#autrainer train -cn   GG_train0dB_test0dB.yaml device=cuda
-#
-#autrainer train -cn   GG_train0dB_test10dB.yaml device=cuda
-#
-#autrainer train -cn   GG_train0dB_test20dB.yaml device=cuda
-#
-#autrainer train -cn   GG_train0dB_test30dB.yaml device=cuda
-#
-#autrainer train -cn   GG_train0dB_test40dB.yaml device=cuda
-
+echo "=== All steps completed ==="
 echo "Job finished."
