@@ -1,22 +1,32 @@
 #!/usr/bin/env bash
 
-#SBATCH --time=12:00:00
-#SBATCH --partition=students
-#SBATCH --gres=gpu:1
+#SBATCH -A NAISS2025-5-98          # Account/project
+#SBATCH -p alvis                   # Partition/queue
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=50000
-#SBATCH --output=./autrain_job_0.out
+#SBATCH -N 1 --gpus-per-node=A40:1
+#SBATCH -t 0-20:00:00              # Walltime
+#SBATCH --job-name=curriculum
+#SBATCH --output=curriculum_job.log
+#SBATCH --error=curriculum_job.err
 
-# Change to your working directory
-cd /home/go35mig/aucurriculum
+# Load CUDA module (MUST be before running apptainer)
+module load CUDA/11.8.0
 
-# Activate your virtual environment
-micromamba activate myenv
+module list 2>&1 || true
+which python || true
+which apptainer || true
+nvcc --version || true
 
-echo "Job started on $(hostname)"
-echo "Environment activated"
-which python
-which aucurriculum
+echo "===== GPU (HOST) ====="
+nvidia-smi || true
+nvidia-smi -L || true
+
+# Log GPU usage every 60 seconds in background
+(while true; do nvidia-smi >> gpu_monitor.log 2>&1; sleep 60; done) &
+
+# Container and paths
+CONTAINER=/cephyr/users/zhiping/Alvis/aucum/buiild/aucum.sif
+DATA_PATH=/mimer/NOBACKUP/groups/ulio_inverse/zhiping/data/SpeechCommands
 
 # ===========================================
 # Curriculum Learning Experiment (15 epochs)
@@ -24,19 +34,31 @@ which aucurriculum
 
 # Step 1: Baseline training (generates checkpoints for scoring)
 echo "=== Step 1: Baseline Training ==="
-aucurriculum train device=cuda
+apptainer exec --nv \
+    --env LD_LIBRARY_PATH=/apps/Common/software/CUDA/11.8.0/lib64:\$LD_LIBRARY_PATH \
+    $CONTAINER \
+    aucurriculum train device=cuda ++dataset.path=$DATA_PATH
 
 # Step 2: Compute CumAcc difficulty scores
 echo "=== Step 2: CumAcc Scoring ==="
-aucurriculum curriculum device=cuda
+apptainer exec --nv \
+    --env LD_LIBRARY_PATH=/apps/Common/software/CUDA/11.8.0/lib64:\$LD_LIBRARY_PATH \
+    $CONTAINER \
+    aucurriculum curriculum device=cuda ++dataset.path=$DATA_PATH
 
 # Step 3: Curriculum training (easy → hard)
 echo "=== Step 3: Curriculum Training ==="
-aucurriculum train -cn curriculum_training device=cuda
+apptainer exec --nv \
+    --env LD_LIBRARY_PATH=/apps/Common/software/CUDA/11.8.0/lib64:\$LD_LIBRARY_PATH \
+    $CONTAINER \
+    aucurriculum train -cn curriculum_training device=cuda ++dataset.path=$DATA_PATH
 
 # Step 4: AntiCurriculum training (hard → easy)
 echo "=== Step 4: AntiCurriculum Training ==="
-aucurriculum train -cn anticurriculum_training device=cuda
+apptainer exec --nv \
+    --env LD_LIBRARY_PATH=/apps/Common/software/CUDA/11.8.0/lib64:\$LD_LIBRARY_PATH \
+    $CONTAINER \
+    aucurriculum train -cn anticurriculum_training device=cuda ++dataset.path=$DATA_PATH
 
 echo "=== All steps completed ==="
 echo "Job finished."
