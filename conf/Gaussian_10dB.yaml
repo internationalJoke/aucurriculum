@@ -1,0 +1,34 @@
+defaults:
+  - _aucurriculum_train_
+  - _self_
+
+results_dir: /mimer/NOBACKUP/groups/ulio_inverse/zhiping/data
+experiment_id: Gaussian_10dB
+iterations: 15
+
+train_augmentation:
+  _target_: autrainer.augmentations.AugmentationPipeline
+  id: SNR_noise(10dB)
+  generator_seed: 0
+  pipeline:
+    - autrainer.augmentations.SNR_noise:
+        snr: 10
+        noise_type: StaticGaussian
+        p: 1.0
+        generator_seed: 0
+
+hydra:
+  sweeper:
+    params:
+      +seed: 1
+      +batch_size: 64
+      +learning_rate: 0.001
+      dataset: SpeechCommands-16k
+      model: Cnn10
+      optimizer: Adam
+      curriculum: None
+      curriculum/sampling: None
+      curriculum/scoring: None
+      curriculum/pacing: None
+      curriculum.pacing.initial_size: 1
+      curriculum.pacing.final_iteration: 0
