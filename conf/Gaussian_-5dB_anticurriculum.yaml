@@ -3,7 +3,7 @@ defaults:
   - _self_
 
 results_dir: /mimer/NOBACKUP/groups/ulio_inverse/zhiping/data
-experiment_id: Gaussian_-5dB_anticurriculum
+experiment_id: Gaussian_-5dB
 iterations: 15
 
 train_augmentation:

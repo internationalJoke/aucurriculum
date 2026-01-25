@@ -44,7 +44,7 @@ echo "=== Step 2: CumAcc Scoring ==="
 apptainer exec --nv \
     --env LD_LIBRARY_PATH=/apps/Common/software/CUDA/11.8.0/lib64:\$LD_LIBRARY_PATH \
     $CONTAINER \
-    aucurriculum curriculum -cn Gaussian_10dB device=cuda ++dataset.path=$DATA_PATH
+    aucurriculum curriculum -cn Gaussian_10dB_scoring device=cuda ++dataset.path=$DATA_PATH
 
 # Step 3: Curriculum training (easy -> hard)
 echo "=== Step 3: Curriculum Training ==="

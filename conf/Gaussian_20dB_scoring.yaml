@@ -1,0 +1,15 @@
+defaults:
+  - _aucurriculum_score_
+  - _self_
+
+results_dir: /mimer/NOBACKUP/groups/ulio_inverse/zhiping/data
+experiment_id: Gaussian_20dB
+
+hydra:
+  sweeper:
+    params:
+      curriculum/scoring: CumulativeAccuracy
+      curriculum/scoring.run_name: SpeechCommands-16k_Cnn10_Adam_0.001_64_epoch_15_None_None_N_N_None_None_1_0_1
+
+correlation:
+  correlation_matrix: all
