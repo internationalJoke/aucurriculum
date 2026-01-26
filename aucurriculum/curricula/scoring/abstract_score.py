@@ -231,12 +231,18 @@ class AbstractScore(ABC):
             training_seed = dataset_seed = cfg.seed
         set_seed(training_seed)
 
-        am = AugmentationManager(cfg.augmentation)
-        train_aug, *_ = am.get_augmentations()
+        am = AugmentationManager(
+            train_augmentation=cfg.train_augmentation,
+            dev_augmentation=cfg.train_augmentation,
+            test_augmentation=cfg.test_augmentation,
+        )
+        train_aug, dev_aug, test_aug = am.get_augmentations()
         transform_manager = TransformManager(
             model_transform=cfg.model.pop("transform", None),
             dataset_transform=cfg.dataset.pop("transform", None),
             train_augmentation=train_aug,
+            dev_augmentation=dev_aug,
+            test_augmentation=test_aug,
         )
 
         transforms = transform_manager.get_transforms()
