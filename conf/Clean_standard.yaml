@@ -4,13 +4,13 @@ defaults:
 
 results_dir: /mimer/NOBACKUP/groups/ulio_inverse/zhiping/data
 experiment_id: Clean_standard
-iterations: 15
+iterations: 5
 
 hydra:
   sweeper:
     params:
       +seed: 1
-      +batch_size: 64
+      +batch_size: 256
       +learning_rate: 0.001
       dataset: SpeechCommands-16k
       model: Cnn10

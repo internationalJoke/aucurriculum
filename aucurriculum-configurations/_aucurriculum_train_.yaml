@@ -38,7 +38,6 @@ hydra:
       ${iterations}_\
       ${scheduler.id}_\
       ${train_augmentation.id}_\
-      ${test_augmentation.id}_\
       ${curriculum.short}_\
       ${curriculum.sampling.short}_\
       ${curriculum.scoring.id}_\
