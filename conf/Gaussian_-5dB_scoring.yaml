@@ -9,7 +9,6 @@ hydra:
   sweeper:
     params:
       curriculum/scoring: CumulativeAccuracy
-      curriculum/scoring.run_name: SpeechCommands-16k_Cnn10_Adam_0.001_64_epoch_15_None_None_N_N_None_None_1_0_1
 
 correlation:
   correlation_matrix: all

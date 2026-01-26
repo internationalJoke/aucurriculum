@@ -34,10 +34,10 @@ DATA_PATH=/mimer/NOBACKUP/groups/ulio_inverse/zhiping/data/SpeechCommands
 
 # Step 1: Standard training with 10dB noise (generates checkpoints for scoring)
 echo "=== Step 1: Standard Training with Gaussian 10dB ==="
-apptainer exec --nv \
-    --env LD_LIBRARY_PATH=/apps/Common/software/CUDA/11.8.0/lib64:\$LD_LIBRARY_PATH \
-    $CONTAINER \
-    aucurriculum train -cn Gaussian_10dB device=cuda ++dataset.path=$DATA_PATH
+#apptainer exec --nv \
+#    --env LD_LIBRARY_PATH=/apps/Common/software/CUDA/11.8.0/lib64:\$LD_LIBRARY_PATH \
+#    $CONTAINER \
+#    aucurriculum train -cn Gaussian_10dB device=cuda ++dataset.path=$DATA_PATH
 
 # Step 2: Compute CumAcc difficulty scores
 echo "=== Step 2: CumAcc Scoring ==="
