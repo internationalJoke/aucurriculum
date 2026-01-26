@@ -4,7 +4,8 @@ defaults:
   - model: ???
   - optimizer: ???
   - scheduler: None
-  - augmentation: None
+  - augmentation@train_augmentation: None
+  - augmentation@test_augmentation: None
   - curriculum: None
   - plotting: Default
   - override hydra/sweeper: aucurriculum_train_sweeper
@@ -36,7 +37,8 @@ hydra:
       ${training_type}_\
       ${iterations}_\
       ${scheduler.id}_\
-      ${augmentation.id}_\
+      ${train_augmentation.id}_\
+      ${test_augmentation.id}_\
       ${curriculum.short}_\
       ${curriculum.sampling.short}_\
       ${curriculum.scoring.id}_\
